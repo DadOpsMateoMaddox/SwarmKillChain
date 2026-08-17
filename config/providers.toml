@@ -1,0 +1,24 @@
+[providers.claude]
+kind = "command"
+command = "claude"
+args = ["-p"]
+role = "investigator"
+
+[providers.gpt]
+kind = "command"
+command = "codex"
+args = ["exec"]
+role = "skeptic"
+
+[providers.gwen]
+kind = "command"
+command = "gwen"
+args = []
+role = "alternative_narrative"
+enabled = true
+
+[policy]
+max_output_bytes = 100000
+timeout_seconds = 120
+require_explicit_provider = true
+
