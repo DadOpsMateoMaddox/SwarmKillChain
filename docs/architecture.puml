@@ -1,0 +1,101 @@
+@startuml sans_swarm_architecture
+title SANS Swarm - Read-Only, Self-Verifying DFIR Architecture
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #4a5568
+
+actor "DFIR Operator" as Operator
+
+rectangle "Case Workspace" as Workspace {
+  folder "Evidence (read-only)" as Evidence
+  folder "Case brief" as Brief
+  folder "Reports" as Reports
+}
+
+rectangle "Swarm Controller" as Controller {
+  component "Phase State Machine" as State
+  component "Budget + Retry Gates" as Gates
+  component "Provider Router" as Router
+}
+
+rectangle "Model Roles" as Models {
+  component "Claude\nInvestigator" as Claude
+  component "GPT/Codex\nSkeptic" as GPT
+  component "Gwen\nAlternative Narrative" as Gwen
+}
+
+rectangle "Enforced Forensic Boundary" as Boundary #fff4e5 {
+  component "Typed MCP Tools" as MCP
+  component "Path + Argument Validation" as Validate
+  component "Read-Only Executor" as Executor
+  component "Output Limits + Timeouts" as Limits
+}
+
+rectangle "Evidence Services" as Services {
+  component "Linux / Container Tools" as Linux
+  component "Windows / Memory Tools" as Windows
+  component "Timeline + IOC Correlation" as Correlation
+}
+
+rectangle "Verification + Provenance" as Audit #eef8f0 {
+  component "EvidenceGuard\npre/post hashes" as Hashes
+  component "Append-Only\nHash-Chained Audit" as AuditLog
+  component "Finding Citation Gate" as FindingGate
+  component "Consensus + Disagreement" as Consensus
+}
+
+Operator --> Controller : start case / question
+Operator --> Brief : provide scoped context
+Workspace --> Controller : case inputs
+Evidence --> Hashes : fingerprint
+
+Controller --> State
+State --> Gates
+Gates --> Router
+Router --> Claude : investigator
+Router --> GPT : skeptic
+Router --> Gwen : alternative narrative
+
+Claude --> MCP : typed tool request
+GPT --> MCP : independent re-check
+Gwen --> MCP : competing hypothesis check
+MCP --> Validate
+Validate --> Executor
+Executor --> Limits
+Limits --> Linux
+Limits --> Windows
+Limits --> Correlation
+
+Evidence --> Executor : read only
+Executor --> Hashes : before / after
+Executor --> AuditLog : tool call + output hash
+Claude --> AuditLog : model call + directive
+GPT --> AuditLog
+Gwen --> AuditLog
+
+Claude --> FindingGate : draft finding + citations
+GPT --> FindingGate : verdict
+Gwen --> FindingGate : alternative review
+FindingGate --> Consensus
+Consensus --> Gates : confirmed / inferred / refuted / uncertain
+Gates --> State : retry or advance
+Consensus --> Reports : accepted structured findings
+AuditLog --> Reports : provenance and chain
+
+note right of Boundary
+  No generic shell.
+  No evidence writes.
+  No arbitrary network access.
+  Every call is typed, bounded,
+  time-limited, and auditable.
+end note
+
+note bottom of Consensus
+  Unresolved disagreement remains UNCERTAIN.
+  A model assertion never becomes evidence by itself.
+end note
+
+@enduml
+
