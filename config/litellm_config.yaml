@@ -1,0 +1,28 @@
+# LiteLLM proxy config for the SwarmKillChain seats.
+# Run:  litellm --config config/litellm_config.yaml --port 4000
+# Then set LITELLM_BASE_URL=http://localhost:4000 (default assumed by
+# providers.health_report() if unset) and LITELLM_API_KEY if you enable
+# general_settings.master_key below.
+#
+# No secrets live in this file — hosted-provider keys are read from env vars
+# and those model entries simply fail cleanly if the var is unset.
+
+model_list:
+  - model_name: investigator
+    litellm_params:
+      model: anthropic/claude-sonnet-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: skeptic
+    litellm_params:
+      model: openai/gpt-5.6
+      api_key: os.environ/OPENAI_API_KEY
+  - model_name: adjudicator
+    litellm_params:
+      model: xai/grok-4.6
+      api_key: os.environ/XAI_API_KEY
+
+litellm_settings:
+  drop_params: true          # silently drop params a backend doesn't support
+
+# general_settings:
+#   master_key: os.environ/LITELLM_MASTER_KEY   # uncomment to require auth
