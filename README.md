@@ -1,38 +1,71 @@
-# SANS Swarm
+# SwarmKillChain
 
-An isolated, deterministic-first DFIR swarm built from patterns found in the
-attached SANS FIND EVIL projects. The swarm separates model roles from the
-forensic execution boundary:
+A practical security operations and automation project focused on kill-chain-aware swarm workflows.
+
+## Overview
+
+SwarmKillChain is a JavaScript-first repository with supporting TypeScript and Python utilities. The goal is to provide repeatable, operator-friendly patterns for:
+
+- Threat detection and triage workflows
+- Kill-chain stage mapping and correlation
+- Automation hooks for response and enrichment
+- Operational visibility for analysts and engineers
+
+## Language Composition
+
+- JavaScript: 92.4%
+- TypeScript: 5.1%
+- Python: 2.0%
+- Other: 0.5%
+
+## Project Goals
+
+- Build modular workflows mapped to kill-chain phases
+- Improve signal-to-noise through structured triage
+- Reduce mean time to detect (MTTD) and respond (MTTR)
+- Support collaboration between analysts, engineers, and leadership
+
+## Suggested Repository Structure
 
 ```text
-case evidence -> typed read-only tools -> audit chain -> independent agents
-                                                |-> investigator
-                                                |-> skeptic
-                                                |-> alternative narrative
-                                                `-> report gate
+.
+├── src/                  # Core JavaScript/TypeScript logic
+├── scripts/              # Automation and operational scripts
+├── python/               # Python helpers and integrations
+├── docs/                 # Architecture, playbooks, and runbooks
+└── .github/              # Templates and repo automation metadata
 ```
 
-Models may plan, select, correlate, challenge, and summarize. They do not get
-an arbitrary shell, evidence write access, or an unverified finding channel.
+## Getting Started
 
-## Initial reuse decisions
+1. Clone the repository
+2. Install dependencies
+3. Configure environment variables
+4. Run local validation/tests
+5. Start with a small workflow and iterate
 
-See [docs/REUSE_MATRIX.md](docs/REUSE_MATRIX.md) and
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The five source archives remain
-outside this repository. No case data or generated reports are copied here.
+## Roadmap
 
-## Provider status
+- [ ] Define kill-chain taxonomy and event schema
+- [ ] Add baseline workflow templates
+- [ ] Add detection quality scoring
+- [ ] Add dashboard and reporting exports
+- [ ] Add incident simulation scenarios
 
-Claude and GPT/Codex are represented by configurable adapters. Gwen is also a
-configurable adapter, but its executable or endpoint is not currently
-discoverable on this machine. `python -m sans_swarm.providers health` reports
-that state instead of silently routing to another model.
+## Contributing
 
-## Development
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull requests.
 
-```powershell
-cd D:\MasterVault\sans-swarm
-python -m pytest
-python -m sans_swarm.providers health
-```
+## Project Management
 
+Use GitHub Issues for work tracking and a GitHub Project board for planning:
+
+- **Backlog**: ideas and unscheduled items
+- **Ready**: refined and ready to start
+- **In Progress**: active work
+- **Review**: awaiting review/validation
+- **Done**: completed work
+
+## License
+
+Add a LICENSE file appropriate for your organization and usage model.
