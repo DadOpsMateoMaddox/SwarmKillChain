@@ -1,24 +1,13 @@
-[providers.claude]
-kind = "command"
-command = "claude"
-args = ["-p"]
-role = "investigator"
+[seats.investigator]
+model = "investigator"
 
-[providers.gpt]
-kind = "command"
-command = "codex"
-args = ["exec"]
-role = "skeptic"
+[seats.skeptic]
+model = "skeptic"
 
-[providers.gwen]
-kind = "command"
-command = "gwen"
-args = []
-role = "alternative_narrative"
-enabled = true
+[seats.adjudicator]
+model = "adjudicator"
 
 [policy]
 max_output_bytes = 100000
 timeout_seconds = 120
 require_explicit_provider = true
-
